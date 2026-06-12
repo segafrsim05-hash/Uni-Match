@@ -14,26 +14,33 @@ genai.configure(api_key=CHIAVE_API)
 def carica_database():
     try:
         corsi_testo = []
-        with open('database_unito_arricchito.csv', 'r', encoding='latin-1') as f:
+        # Aggiunto newline='' (trucco tecnico per leggere perfettamente i CSV del Mac)
+        with open('database_unito_arricchito.csv', 'r', encoding='latin-1', newline='') as f:
             prima_riga = f.readline()
-            # Capisce da solo se usare la virgola o il punto e virgola
             separatore = ';' if ';' in prima_riga else ','
             f.seek(0)
             
             lettore = csv.DictReader(f, delimiter=separatore)
+            
             for riga in lettore:
-                # Estrae i dati al sicuro da eventuali errori di battitura nelle colonne
-                ateneo = riga.get('Università', riga.get('Universita', 'Ateneo Sconosciuto'))
-                nome = riga.get('Nome Corso', 'Corso Sconosciuto')
-                info = riga.get('Descrizione per IA', 'Nessuna info')
-                link = riga.get('Link', 'Nessun link')
+                # SPAZZANEVE: prende tutte le chiavi, le mette in minuscolo e toglie gli spazi invisibili!
+                riga_pulita = {str(k).strip().lower(): str(v).strip() for k, v in riga.items() if k is not None}
+                
+                ateneo = riga_pulita.get('università', riga_pulita.get('universita', 'Ateneo Sconosciuto'))
+                nome = riga_pulita.get('nome corso', 'Corso Sconosciuto')
+                info = riga_pulita.get('descrizione per ia', 'Nessuna info')
+                link = riga_pulita.get('link', 'Nessun link')
                 
                 corsi_testo.append(f"- ATENEO: {ateneo} | CORSO: {nome} | INFO: {info} | LINK: {link}")
                 
+        # LA TRAPPOLA: se il primo corso non viene letto bene, fermiamo tutto e stampiamo le VERE colonne
+        if corsi_testo and "Corso Sconosciuto" in corsi_testo[0]:
+            st.error(f"🚨 COLONNE NON RICONOSCIUTE! Excel le ha salvate così: {list(riga.keys())}")
+            st.stop()
+            
         return "\n".join(corsi_testo)
         
     except Exception as e:
-        # Se qualcosa va storto, blocca tutto e ci fa vedere l'errore esatto a schermo
         st.error(f"🚨 ALLARME ROSSO DATABASE: {e}")
         st.stop()
 

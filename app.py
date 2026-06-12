@@ -1,7 +1,42 @@
 import streamlit as st
 import csv
 import google.generativeai as genai
+# --- CONFIGURAZIONE PAGINA (Deve essere la primissima riga di Streamlit!) ---
+st.set_page_config(page_title="Uni-Match | Trova la tua strada", page_icon="🎓", layout="centered")
 
+# --- INIEZIONE DI DESIGN PREMIUM (CSS Custom) ---
+st.markdown("""
+    <style>
+    /* Nasconde il menu in alto a destra e la scritta "Made with Streamlit" in basso */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Rende il bottone di ricerca enorme, colorato e cliccabile */
+    .stButton>button {
+        background-color: #2e6bc6; /* Blu Tech Elegante */
+        color: white;
+        border-radius: 10px;
+        height: 50px;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    
+    /* Effetto quando passi sopra il bottone col mouse */
+    .stButton>button:hover {
+        background-color: #1a4a90;
+        border-color: #1a4a90;
+    }
+    
+    /* Colora lo sfondo della barra laterale per farla risaltare */
+    [data-testid="stSidebar"] {
+        background-color: #f8f9fa;
+        border-right: 1px solid #e0e0e0;
+    }
+    </style>
+""", unsafe_allow_html=True)
 # 1. IMPOSTAZIONI GRAFICHE DELLA PAGINA
 st.set_page_config(page_title="Il Tuo Orientatore IA", page_icon="🎓", layout="centered")
 

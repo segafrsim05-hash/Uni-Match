@@ -15,9 +15,9 @@ def carica_database():
     corsi_testo = []
     try:
         with open("database_unito_arricchito.csv", mode='r', encoding='utf-8') as f:
-            lettore = csv.DictReader(f)
+            lettore = csv.DictReader(f, delimiter=';')
             for riga in lettore:
-                corsi_testo.append(f"- CORSO: {riga['Nome Corso']} | INFO: {riga['Descrizione per IA']} | LINK: {riga['Link']}")
+                corsi_testo.append(f"- ATENEO: {riga['Nome Corso']} | INFO: {riga['Descrizione per IA']} | LINK: {riga['Link']}")
         return "\n".join(corsi_testo)
     except Exception as e:
         return f"Errore nel caricamento dati: {e}"
@@ -41,14 +41,15 @@ if st.button("Cerca il mio Corso Ideale 🚀"):
             
             istruzioni_per_ia = f"""
             Sei un orientatore universitario amichevole e super esperto.
-            Hai a disposizione ESCLUSIVAMENTE il seguente database ufficiale dei corsi dell'Università di Torino:
+            Hai a disposizione ESCLUSIVAMENTE il seguente database ufficiale dei corsi:
             {libro_di_testo}
             
             Il tuo compito:
             1. Leggi la richiesta dello studente.
             2. Trova i 2 o 3 corsi più adatti a lui nel database.
             3. Spiega in modo incoraggiante perché li hai scelti.
-            4. Fornisci sempre il Link ufficiale alla fine.
+            4. Scrivi SEMPRE in grassetto il nome dell'Università che eroga il corso (es. **Università di Torino** o **Politecnico di Torino**).
+            5. Fornisci sempre il Link ufficiale alla fine.
             """
             
             try:

@@ -12,15 +12,30 @@ genai.configure(api_key=CHIAVE_API)
 # 2. FUNZIONE PER CARICARE IL DATABASE IN MODO EFFICIENTE
 @st.cache_data # Questo trucco fa sì che il sito non ricarichi l'Excel ogni volta che clicchi un bottone
 def carica_database():
-    corsi_testo = []
     try:
-        with open("database_unito_arricchito.csv", mode='r', encoding='utf-8') as f:
-            lettore = csv.DictReader(f, delimiter=';')
+        corsi_testo = []
+        with open('database_unito_arricchito.csv', 'r', encoding='utf-8') as f:
+            prima_riga = f.readline()
+            # Capisce da solo se usare la virgola o il punto e virgola
+            separatore = ';' if ';' in prima_riga else ','
+            f.seek(0)
+            
+            lettore = csv.DictReader(f, delimiter=separatore)
             for riga in lettore:
-                corsi_testo.append(f"- ATENEO: {riga['Nome Corso']} | INFO: {riga['Descrizione per IA']} | LINK: {riga['Link']}")
+                # Estrae i dati al sicuro da eventuali errori di battitura nelle colonne
+                ateneo = riga.get('Università', riga.get('Universita', 'Ateneo Sconosciuto'))
+                nome = riga.get('Nome Corso', 'Corso Sconosciuto')
+                info = riga.get('Descrizione per IA', 'Nessuna info')
+                link = riga.get('Link', 'Nessun link')
+                
+                corsi_testo.append(f"- ATENEO: {ateneo} | CORSO: {nome} | INFO: {info} | LINK: {link}")
+                
         return "\n".join(corsi_testo)
+        
     except Exception as e:
-        return f"Errore nel caricamento dati: {e}"
+        # Se qualcosa va storto, blocca tutto e ci fa vedere l'errore esatto a schermo
+        st.error(f"🚨 ALLARME ROSSO DATABASE: {e}")
+        st.stop()
 
 libro_di_testo = carica_database()
 

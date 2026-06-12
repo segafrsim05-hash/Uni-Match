@@ -1,9 +1,6 @@
 import streamlit as st
 import csv
 import google.generativeai as genai
-# --- CONFIGURAZIONE PAGINA (Deve essere la primissima riga di Streamlit!) ---
-st.set_page_config(page_title="Uni-Match | Trova la tua strada", page_icon="🎓", layout="centered")
-
 # --- INIEZIONE DI DESIGN PREMIUM (CSS Custom) ---
 st.markdown("""
     <style>
@@ -15,7 +12,7 @@ st.markdown("""
     /* Rende il bottone di ricerca enorme, colorato e cliccabile */
     .stButton>button {
         background-color: #2e6bc6; /* Blu Tech Elegante */
-        color: white;
+        color: white !important;
         border-radius: 10px;
         height: 50px;
         width: 100%;
@@ -30,10 +27,13 @@ st.markdown("""
         border-color: #1a4a90;
     }
     
-    /* Colora lo sfondo della barra laterale per farla risaltare */
+    /* Colora lo sfondo della barra laterale e FORZA il testo scuro (Anti-Dark Mode) */
     [data-testid="stSidebar"] {
         background-color: #f8f9fa;
         border-right: 1px solid #e0e0e0;
+    }
+    [data-testid="stSidebar"] * {
+        color: #1a1a1a !important; /* Costringe tutte le scritte della sidebar a essere nere */
     }
     </style>
 """, unsafe_allow_html=True)

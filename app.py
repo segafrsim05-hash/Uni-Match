@@ -14,7 +14,7 @@ genai.configure(api_key=CHIAVE_API)
 def carica_database():
     try:
         corsi_testo = []
-        with open('database_unito_arricchito.csv', 'r', encoding='utf-8') as f:
+        with open('database_unito_arricchito.csv', 'r', encoding='latin-1') as f:
             prima_riga = f.readline()
             # Capisce da solo se usare la virgola o il punto e virgola
             separatore = ';' if ';' in prima_riga else ','

@@ -47,11 +47,18 @@ def carica_database():
 libro_di_testo = carica_database()
 
 # 3. LA CARROZZERIA DEL SITO (IL TESTO E I BOTTONI)
-st.title("🎓 Trova la tua strada")
-st.write("Non sai cosa studiare all'Università di Torino? Racconta all'Intelligenza Artificiale cosa ti appassiona, le tue materie preferite o il lavoro dei tuoi sogni. Penserà lei a trovare il corso perfetto per te.")
+st.title("🎓 Uni-Match")
+st.subheader("Trova la tua università ideale a Torino con l'Intelligenza Artificiale")
+st.write("Inserisci le tue passioni, i tuoi hobby o cosa ti piacerebbe fare da grande. La nostra IA analizzerà i database ufficiali di **UniTo** e **PoliTo** per trovare il percorso perfetto per te.")
 
-st.markdown("---") # Crea una linea divisoria elegante
 
+with st.sidebar:
+    st.header("⚡ Info Progetto")
+    st.write("Uni-Match è un orientatore smart basato su algoritmi RAG e Google Gemini.")
+    st.write("🔹 **Atenei scansionati:** 2 (UniTo & PoliTo)")
+    st.write("🔹 **Corsi in archivio:** +190")
+    st.markdown("---")
+    st.caption("Creato con ❤️ dal Team di Uni-Match")
 # La barra di ricerca dove l'utente scrive
 domanda_studente = st.text_area("Cosa ti piace fare?", placeholder="Es: Mi piace l'informatica ma anche il mondo della salute...")
 
@@ -83,8 +90,7 @@ if st.button("Cerca il mio Corso Ideale 🚀"):
                 
                 # Mostra la risposta in un box verde di successo
                 st.success("Trovati! Ecco i percorsi migliori per te:")
-                st.write(risposta.text)
-                
+                st.info(risposta.text)                
             except Exception as errore:
                 st.error(f"C'è stato un problema di connessione: {errore}")
     else:
